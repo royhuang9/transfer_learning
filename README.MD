@@ -12,7 +12,7 @@ The original input size of VGG16 is 224\*224, but the CIFAR image size:32\*32. I
 4) Train my own fc layers to classify the image.
 
 
-In the conv3 sublayer, the size is not change. The pooling layer descrease the size in half. If the input size is 32*32, the output of pool5 will be 1*1
+In the conv3 sublayer, the size is not change. The pooling layer descrease the size in half. If the input size is 32\*32, the output of pool5 will be 1\*1
 
 ### Test result
 
