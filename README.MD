@@ -1,7 +1,9 @@
-##Using VGG16 to classify cifar-10 by Transfer Learning
+
+# Using VGG16 to classify cifar-10 by Transfer Learning
 
 ### Introduction
-I am playing with 
+I am playing with VGG16 transfer learning and keras.
+
 ### Steps
 The original input size of VGG16 is 224\*224, but the CIFAR image size:32\*32. I am not going to resize the CIFAR image size to 224\*224. In order to do so, 
 1) I need remove the fully connected layer of VGG16 and only reserve the conv layers.
@@ -12,7 +14,7 @@ The original input size of VGG16 is 224\*224, but the CIFAR image size:32\*32. I
 
 In the conv3 sublayer, the size is not change. The pooling layer descrease the size in half. If the input size is 32*32, the output of pool5 will be 1*1
 
-###Test result
+### Test result
 
 #### Fixed VGG16 conv layer
 The validation accuracy is very low about 0.64.
@@ -39,6 +41,6 @@ when calling cifar10.load_data to load data
 ```
 The y_train is an vector in shape (50000, ), we cannot provide it to model.fit directly. np_utils.to_categorical should be called to convert it first.
 
-####Preprocessing of X_train
+#### Preprocessing of X_train
 The X_train should be preprocessed first by calling
 keras.applications.vgg16.preprocess_input.
