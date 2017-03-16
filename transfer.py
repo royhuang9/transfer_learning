@@ -1,10 +1,11 @@
 from keras.applications.vgg16 import VGG16
-from keras.layers import Input, Flatten, Dense, Dropout
+from keras.layers import Input, Flatten, Dense, Dropout, BatchNormalization
 from sklearn.model_selection import train_test_split
 from keras.models import Model
 from keras.datasets import cifar10
 from keras.utils.np_utils import to_categorical
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
+from keras.applications.vgg16 import preprocess_input 
 
 import matplotlib.pyplot as plt
 import json
@@ -22,33 +23,41 @@ def create_model():
     x = Flatten(name='Flatten')(x)
     
     # 512 dense layer
-    x = Dense(512, activation='relu', name='fc1')(x)    
+    x = Dense(2048, activation='relu', name='fc1')(x)    
     # dropout
     x = Dropout(.5, name='drop1')(x)
-
+    x = BatchNormalization()(x)
 
     # 512 dense layer
-    x = Dense(256, activation='relu', name='fc2')(x)
+    x = Dense(2048, activation='relu', name='fc2')(x)
     x = Dropout(.5, name='drop2')(x)
+    x = BatchNormalization()(x)
+
     
     # 10 classes
     predictions = Dense(10, activation='softmax', name='classifier')(x)
 
     model = Model(input=base_model.input, output=predictions)
-    
+    '''
     for layer in base_model.layers:
         layer.trainable = False
+    '''
     
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    #print(model.summary())
+    print(model.summary())
     
     return model
     
 if __name__ == '__main__':
     (X_train, y_train), (_, _) = cifar10.load_data()
+    
+    X_train = preprocess_input(X_train.astype('float'))
+    
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=0)
     y_train_encoded = to_categorical(y_train)
     y_val_encoded = to_categorical(y_val)
+    
+    
     
     print('y_train_encoded shape : {}'.format(y_train_encoded.shape))
     print('y_val_encoded shape : {}'.format(y_val_encoded.shape))
